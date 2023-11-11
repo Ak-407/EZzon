@@ -302,71 +302,24 @@ app.post("/login", function(req,res){
     
 
         
-  // app.post("/search", function(req, res) {
-  //   const searchTerm = req.body.search1;
-  
-  //   // Perform a MongoDB query to find items that match the search term
-  //   file.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItems) {
-  //     kitchen.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItemsk) {
-  //       phone.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItemsp) {
-  //     if (err) {
-  //       console.log(err);
-  //       res.send("Error occurred during the search.");
-  //     } else {
-  //       res.render("searchResults", { results: foundItems, recordss: foundItems, kitchen:foundItemsk, phone:foundItemsp }); // Pass the 'recordss' variable
-  //     }
-  //   })
-  // })
-  //   });
-  // });
   app.post("/search", function(req, res) {
     const searchTerm = req.body.search1;
   
-    // Create an array to store the results from different collections
-    let searchResults = { recordss: [], kitchen: [], phone: [] };
-  
-    // Define a function to handle rendering the results
-    const renderResults = () => {
-      res.render("searchResults", searchResults);
-    };
-  
-    // Perform a MongoDB query to find items that match the search term in each collection
+    // Perform a MongoDB query to find items that match the search term
     file.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItems) {
+      kitchen.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItemsk) {
+        phone.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItemsp) {
       if (err) {
         console.log(err);
-        return res.send("Error occurred during the search.");
+        res.send("Error occurred during the search.");
+      } else {
+        res.render("searchResults", { results: foundItems, recordss: foundItems, kitchen:foundItemsk, phone:foundItemsp }); // Pass the 'recordss' variable
       }
-      searchResults.recordss = foundItems;
-      // Check if all queries are complete before rendering the results
-      if (Object.keys(searchResults).every((key) => searchResults[key].length !== 0)) {
-        renderResults();
-      }
-    });
-  
-    kitchen.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItemsk) {
-      if (err) {
-        console.log(err);
-        return res.send("Error occurred during the search.");
-      }
-      searchResults.kitchen = foundItemsk;
-      // Check if all queries are complete before rendering the results
-      if (Object.keys(searchResults).every((key) => searchResults[key].length !== 0)) {
-        renderResults();
-      }
-    });
-  
-    phone.find({ productName: { $regex: searchTerm, $options: 'i' } }, function(err, foundItemsp) {
-      if (err) {
-        console.log(err);
-        return res.send("Error occurred during the search.");
-      }
-      searchResults.phone = foundItemsp;
-      // Check if all queries are complete before rendering the results
-      if (Object.keys(searchResults).every((key) => searchResults[key].length !== 0)) {
-        renderResults();
-      }
+    })
+  })
     });
   });
+ 
   
   
   
