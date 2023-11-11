@@ -1,0 +1,179 @@
+<!-- rzp_test_FCY7ZRu9Ix7mw5 -->
+<%- include('partials/header') %>
+<div id="RP">
+    <section class="features" id="features">
+    <h1 class="heading">Razor<span>pay</span></h1>
+</section>
+
+
+<div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+          Amount: ₹ <span id="result"></span>
+      </div>
+      <div class="card-body">
+          Shipping Fee: ₹ 0
+      </div>
+      <div class="card-body">
+          convectional fee: ₹ 55
+      </div>
+      <div class="card-body">
+          <h1>------------------</h1>
+      </div>
+      <div class="card-body">
+          <h1>Total Amount: <span id="grandTotal"></span></h1>
+      </div>
+  
+    </div>
+  </div>
+
+
+  <!-- <form id="razorpay-form" action="/payment" method="POST">
+    <input type="hidden" id="amount" name="amount">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <button type="button" id="razorpay-btn" class="btn btn-dark">
+      <i class="fa-solid fa-bag-shopping fa-shake"></i> Pay With Razorpay
+    </button>
+  </form> -->
+  <button style="background-color: silver; width: 50%; height: 60px; margin-top: 40px; border-radius: 30px;" class="js-pay-bundle" data-itemid="gold200" data-processorid="razor" data-qty="1">Buy</button>
+</div>
+<!-- <script>
+    var total = parseInt(document.getElementById("result").innerHTML = localStorage.getItem("textvalues"));
+    const grandTotal=total + 55;
+    document.getElementById("grandTotal").innerHTML = "₹ " + grandTotal;
+    
+    // Set the total amount to the hidden input field for Razorpay
+    var totalAmount = grandTotal;
+    document.getElementById("result").value = totalAmount; 
+    console.log(totalAmount);
+  // Handle Razorpay payment button click
+  document.getElementById("razorpay-btn").addEventListener("click", function () {
+    var options = {
+      key: "rzp_test_FCY7ZRu9Ix7mw5", // Replace with your Razorpay API key
+      amount: totalAmount * 100, // Amount in paise (100 paise = 1 INR)
+      currency: "INR",
+      name: "Enonn Payment's",
+      description: "Payment for Products/Services",
+      image: "https://media.licdn.com/dms/image/D4D03AQHE58UY-1zCMQ/profile-displayphoto-shrink_400_400/0/1668623305106?e=1695859200&v=beta&t=jQfBOy_ZZycbtXg3r2jcKWryXxfcKJnc-_CdCt4rIiI", // Replace with your website logo URL
+      handler: function (response) {
+        // This function will be called after successful payment
+        // You can perform further actions, like saving the transaction details in the backend
+        // and redirecting the user to a success page.
+        console.log(response); // Response object contains transaction details
+        // You can also redirect the user to a success page using JavaScript:
+        window.location.href = "/"; // Redirect to success page
+      },
+      prefill: {
+        // email: document.querySelector('input[name="username"]').value,
+        // name: document.querySelector('input[name="name"]').value,
+        // contact: document.querySelector('input[name="number"]').value,
+        // You can prefill more customer details if available
+      },
+      notes: {
+        // You can add additional notes for the payment
+      },
+      theme: {
+        color: "#F37254", // Replace with your desired color
+      },
+    };
+
+    // Create a Razorpay instance with the options
+    var rzp = new Razorpay(options);
+
+    // Open the Razorpay checkout form
+    rzp.open();
+  });
+</script> -->
+<script>
+  var total = parseInt(document.getElementById("result").innerHTML = localStorage.getItem("textvalues"));
+    const grandTotal=total + 55;
+    document.getElementById("grandTotal").innerHTML = "₹ " + grandTotal;
+    
+    // Set the total amount to the hidden input field for Razorpay
+    var totalAmount = grandTotal;
+  var total =totalAmount * 100;
+    // Function to lazy load a script
+    // -----------------------------------------------
+    var loadExternalScript = function(path) {
+      var result = $.Deferred(),
+          script = document.createElement("script");
+  
+      script.async = "async";
+      script.type = "text/javascript";
+      script.src = path;
+      script.onload = script.onreadystatechange = function(_, isAbort) {
+        if (!script.readyState || /loaded|complete/.test(script.readyState)) {
+          if (isAbort)
+            result.reject();
+          else
+            result.resolve();
+        }
+      };
+  
+      script.onerror = function() {
+        result.reject();
+      };
+  
+      $("head")[0].appendChild(script);
+  
+      return result.promise();
+    };
+    // Use loadScript to load the Razorpay checkout.js
+  // -----------------------------------------------
+  var callRazorPayScript = function(itemId, amount, qty, processorId) {
+    var merchangeName = "Merchant Name",
+        img = "https://s3.amazonaws.com/uifaces/faces/twitter/jsa/128.jpg",
+        name = "Harshil Hill",
+        description = "Purchase Description",
+        amount = total,
+        qty = qty;
+        
+    loadExternalScript('https://checkout.razorpay.com/v1/checkout.js').then(function() { 
+      var options = {
+        key: 'rzp_test_FCY7ZRu9Ix7mw5',
+        protocol: 'https',
+        hostname: 'api.razorpay.com',
+        amount: amount,
+        name: merchangeName,
+        description: description,
+        image: img,
+        prefill: {
+          name: name,
+        },
+        theme: {
+          color: '#b9a76e'
+        },
+        handler: function (transaction, response){
+          console.log('Tshirt\\ntransaction id: ' + transaction.razorpay_payment_id);
+          console.log(response.razorpay_payment_id)
+        }
+      };
+  
+      window.rzpay = new Razorpay(options);
+  
+      console.log('Item Id: ', amount);
+      console.log('Amount: ', amount);
+      console.log('Quantity: ', qty);
+      console.log('Processor Id: ', processorId);
+  
+      rzpay.open();
+    });
+  }
+  
+  // Trigger call to action buttons depending on the bundle packs
+  // -----------------------------------------------
+  var $payBundle = $('.js-pay-bundle');
+  
+  $payBundle.on('click', function() {
+    var itemId = $(this).data('itemid'),
+        amount = $(this).data('total'),
+        processorid = $(this).data('processorid'),
+        qty = $(this).data('qty');
+  
+    callRazorPayScript(itemId, amount, processorid, qty);
+  });
+  </script>
+
+
+
+<%- include('partials/footer') %>
