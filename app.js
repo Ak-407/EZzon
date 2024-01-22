@@ -10,8 +10,17 @@ const Razorpay = require('razorpay');
 const app = express();
 mongoose.set('strictQuery', true);
 
-mongoose.connect("mongodb+srv://jsamaan:amaan123@cluster0.vz55wc0.mongodb.net/jsamaan?retryWrites=true&w=majority");
+// mongoose.connect("mongodb+srv://jsamaan:amaan123@cluster0.vz55wc0.mongodb.net/jsamaan?retryWrites=true&w=majority");
 
+mongoose.connect("mongodb+srv://jsamaan:amaan123@cluster0.vz55wc0.mongodb.net/jsamaan?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true, // Add this line to use the new Server Discovery and Monitoring engine
+  writeConcern: {
+    w: 'majority',
+    wtimeout: 1000,
+    j: true,
+  },
+});
 
 
 let storage = multer.diskStorage({
