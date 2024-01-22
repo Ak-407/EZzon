@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const md5 = require("md5");
 const multer = require("multer");
 const Razorpay = require('razorpay');
+const port = process.env.PORT || 4000;
 
 const app = express();
 mongoose.set('strictQuery', true);
@@ -492,6 +493,7 @@ app.post("/search", async function (req, res) {
 
 
 
-app.listen(4000, function () {
-  console.log("Server started on port 4000.");
-});
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+
