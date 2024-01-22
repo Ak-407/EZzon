@@ -15,7 +15,7 @@ mongoose.connect("mongodb+srv://jsamaan:amaan123@cluster0.vz55wc0.mongodb.net/js
 
 
 let storage = multer.diskStorage({
-  destination: "./public/photo/",
+  destination: "./public/photo/" ,
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   }
